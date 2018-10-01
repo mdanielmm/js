@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <title>Snake game</title>
+   </head>
+   <body>
+      <canvas id="stage" width="400" height="400"></canvas>
+      <script> 
+         window.onload = function(){
+             stage = document.getElementById("stage");
+             ctx = stage.getContext('2d');
+             
+             document.addEventListener("keydown", function(k){
+             console.log(k.keyCode);                          
+                switch(k.key){
+                    case "ArrowLeft":
+                         velX = -1;
+                         velY = 0;
+                         break;
+                    case "ArrowRight":
+                         velX = +1;
+                         velY = 0;
+                         break;
+                    case "ArrowUp":
+                         velX = 0;
+                         velY = -1;
+                         break;
+                    case "ArrowDown":
+                         velX = 0;
+                         velY = +1;
+                         break;
+                }
+             });
+             
+             setInterval(game, 1000/12);
+         }
+         
+         snake = [];
+         pX = 10; 
+         pY = 10;
+         grid = 20; 
+         tail = 4;
+         velX = 0;
+         velY = 0; 
+         foodX = foodY = 15;
+         
+         function game(){
+             pX += velX;
+             pY += velY;
+             
+             if(pX < 0) pX = grid;
+             if(pX > grid) pX = 0; 
+             if(pY < 0) pY = grid;
+             if(pY > grid)pY = 0; 
+             
+             ctx.fillStyle = "#132F30";
+             ctx.fillRect(0, 0, stage.width, stage.height);
+         
+             ctx.fillStyle = "#11FFD1";
+             for(var i=0; i<snake.length; i++){
+                 ctx.fillRect(snake[i].x * grid, snake[i].y * grid, grid-1, grid-1); 
+                 if(snake[i].x == pX && snake[i].y == pY) tail = 4;
+             }
+         
+             snake.push({x:pX, y:pY})
+             
+             while(snake.length > tail){
+                  snake.shift();
+             }
+             
+             ctx.fillStyle = "white";
+             ctx.fillRect(foodX * grid, foodY * grid, grid-1, grid-1);
+             
+             if(pX == foodX && pY == foodY){
+                tail++;
+                foodX = Math.floor(Math.random() * grid);
+                foodY = Math.floor(Math.random() * grid);    
+             }
+        }
+            
+      </script>
+   </body>
+</html>
